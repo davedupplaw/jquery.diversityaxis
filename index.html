@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<script type="text/javascript" src="js/jquery-1.7.1.min.js" ></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.18.custom.min.js" ></script>
+<script type="text/javascript" src="js/canvas_utils.js" ></script>
+<script type="text/javascript" src="js/jquery.absolute.js" ></script>
+<script type="text/javascript" src="js/diversityaxis.js" ></script>
+<script type="text/javascript" src="js/timeline.js" ></script>
+<script type="text/javascript" src="js/date.format.js" ></script>
+<script type="text/javascript">
+	$(document).ready( function()
+	{
+		var maxV = 1000;
+		var minV = -50;
+		
+		$('#diversityaxis').diversity({
+			maxValue: maxV,
+			minValue: minV,
+			title: "diversity",
+			tickSpacing: 10,
+			longTicks: 50,
+			width: $("body").width(),
+			positionOffset: [-4,0]
+		});
+		
+		$(window).resize( function() { 
+			$('#diversityaxis').diversity('setWidth',$('body').width());
+			$('#timeline').timeline('setWidth',$('body').width());
+		} );
+
+		$('#diversitypoints').height(10*40);
+		var y = 0;
+		var i = 0;
+		for( i = 0; i < 10; i++ )
+		{
+			var v = Math.random()*(maxV-minV) + minV;
+			
+			// Add an object onto the axis
+			var d = $("<div>. "+v+"</div>").css("position","relative").css( "top", y );
+			$('#diversitypoints').append( d );
+			$('#diversityaxis').diversity( 'addObject', { object: d, position: v, yPosition: y } );
+			y += 20;
+		}
+		
+		var minDate = new Date(2010,0,1);
+		var maxDate = new Date();
+		$('#timeline').timeline({
+			width: $("body").width(),
+			minValue: minDate,
+			maxValue: maxDate
+		});
+
+		$('#timepoints').height(10*40);
+		y = 0;
+		for( i = 0; i < 10; i++ )
+		{
+			var v = Math.random()*(maxDate.getTime()-minDate.getTime()) + minDate.getTime();
+			
+			// Add an object onto the axis
+			var d = $("<div>. "+new Date(v).format("dd mmm yy")+"</div>").css("position","relative").css( "top", y );
+			$('#timepoints').append( d );
+			$('#timeline').timeline( 'addObject', { object: d, position: new Date(v), yPosition: y } );
+			y += 20;
+		}
+	} );
+</script>
+</head>
+<body>
+<div id="diversityaxis"></div>
+<div id="diversitypoints"></div>
+<div id="timeline"></div>
+<div id="timepoints"></div>
+</body>
+</html>
